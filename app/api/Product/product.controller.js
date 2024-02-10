@@ -1,5 +1,5 @@
-const productModel = require("../models/Product");
-const productsJson = require("../products.json");
+const productModel = require("./product.model");
+const productsJson = require("../../../products.json");
 
 const addAllProducts = async (req, res) => {
   try {

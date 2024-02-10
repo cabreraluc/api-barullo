@@ -3,7 +3,7 @@ const {
   getProductsPraginate,
   getAllProducts,
   addProduct,
-} = require("../controllers/productController");
+} = require("./product.controller");
 
 const router = express.Router();
 

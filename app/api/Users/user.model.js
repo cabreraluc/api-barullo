@@ -4,14 +4,18 @@ const Schema = mongoose.Schema;
 
 const UsersSchema = Schema(
   {
-    name: String,
+    companyName: String,
     email: String,
     password: String,
-    image: String,
-    favourites: [
+    nameOfPerson: String,
+    lastNameOfPersona: String,
+    typeOfCompany: String,
+    status: ["disabled", "active"],
+    rol: ["closer", "setter", "admin", "client"],
+    products: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Favourites",
+        ref: "Products",
       },
     ],
   },
