@@ -4,24 +4,34 @@ const Schema = mongoose.Schema;
 
 const UsersSchema = Schema(
   {
-    companyName: String,
-    email: String,
-    password: String,
-    nameOfPerson: String,
-    lastNameOfPersona: String,
-    typeOfCompany: String,
-    status: ["disabled", "active"],
-    rol: ["closer", "setter", "admin", "client"],
-    products: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Products",
-      },
-    ],
+    name: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    cellphone: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    password: {
+      type: String,
+    },
+    status: {
+      enum: ["disabled", "active"],
+
+      type: String,
+      default: "active",
+    },
+    userRole: {
+      enum: ["Admin", "Setter", "Closer"],
+      type: String,
+      default: "active",
+    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Users", UsersSchema);

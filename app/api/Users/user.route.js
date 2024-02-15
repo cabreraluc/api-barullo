@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/register-user", registerUser);
 router.post("/login-user", loginUser);
 router.put("/edit-user", editUser);
-router.post("/disable-user", disableUser);
+router.post("/disable-user/:id", disableUser);
 router.get("/", getUsers);
 
 module.exports = router;
