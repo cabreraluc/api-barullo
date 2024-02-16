@@ -1,4 +1,6 @@
+const userModel = require("./user.model.js");
 const usersModel = require("./user.model.js");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
@@ -16,18 +18,38 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await usersModel.findById(id);
+
+    if (user) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(400).json(["The user does not exist"]);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const registerUser = async (req, res) => {
+  const { name, lastName, email, cellphone, password, userRole } = req.body;
   try {
     const userEmailRegistered = await usersModel.findOne({
       email: req.body.email,
     });
-
-    console.log(req.body);
-
-    console.log(userEmailRegistered);
+    const passwordHash = await bcrypt.hash(password, 10);
 
     if (!userEmailRegistered) {
-      const user = await usersModel.create(req.body);
+      const user = await usersModel.create({
+        name,
+        lastName,
+        email,
+        cellphone,
+        password: passwordHash,
+        userRole,
+      });
       return res.status(200).json([user, "Registered user successfully"]);
     } else {
       return res.status(400).json("User already registered.");
@@ -38,15 +60,26 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  const { email, password } = req.body;
   try {
     const user = await usersModel.findOne({
-      email: req.body.email,
-      password: req.body.password,
+      email,
     });
-    console.log(user);
 
     if (user) {
-      return res.status(200).json(user);
+      await bcrypt.compare(password, user.password, function (err, result) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        if (result) {
+          return res.status(200).json(user);
+        } else {
+          return res
+            .status(400)
+            .json({ error: "Las contraseñas no coinciden" });
+        }
+      });
     } else {
       return res.status(400).json({ error: "Unregistered user" });
     }
@@ -56,17 +89,63 @@ const loginUser = async (req, res) => {
 };
 
 const editUser = async (req, res) => {
-  try {
-    const user = await usersModel.findOne({
-      email: req.body.email,
-      password: req.body.password,
-    });
-    console.log(user);
+  const { id } = req.params;
+  const { name, lastName, email, cellphone, password, userRole } = req.body;
 
-    if (user) {
-      return res.status(200).json(user);
+  console.log(name, lastName, email, cellphone, password, userRole);
+  try {
+    const UserCheckCellphone = await usersModel.findOne({ cellphone });
+    const userCheckEmail = await usersModel.findOne({ email });
+
+    const user = await usersModel.findById(id);
+
+    if (cellphone !== user.cellphone) {
+      if (UserCheckCellphone) {
+        return res
+          .status(400)
+          .send([
+            ["This cellphone is already registered."],
+            { cellphone: true },
+          ]);
+      }
+    }
+
+    if (email !== user.email) {
+      if (userCheckEmail) {
+        return res
+          .status(400)
+          .send([["This email is already registered."], { email: true }]);
+      }
+    }
+
+    if (password === "") {
+      const userUpdated = await userModel.findByIdAndUpdate(
+        id,
+        { cellphone, lastName, email, name, userRole },
+        {
+          new: true,
+        }
+      );
+
+      return res.status(200).json([userUpdated, "User updated."]);
     } else {
-      return res.status(400).json({ error: "Usuario no registrado" });
+      const passwordHash = await bcrypt.hash(password, 10);
+      const userUpdated = await userModel.findByIdAndUpdate(
+        id,
+        {
+          cellphone,
+          email,
+          name,
+          lastName,
+          password: passwordHash,
+          userRole,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return res.status(200).json([userUpdated, "User updated"]);
     }
   } catch (error) {
     console.log(error);
@@ -93,4 +172,5 @@ module.exports = {
   editUser,
   disableUser,
   getUsers,
+  getUserById,
 };
