@@ -63,17 +63,46 @@ const registerProspect = async (req, res) => {
     user,
   } = req.body;
   try {
-    const prospectEmailRegistered = await prospectsModel.findOne({
-      email: req.body.email,
-    });
+    if (email !== "") {
+      const prospectEmailRegistered = await prospectsModel.findOne({
+        email: req.body.email,
+      });
 
-    if (!prospectEmailRegistered) {
+      if (!prospectEmailRegistered) {
+        const prospect = await prospectsModel.create({
+          name,
+          lastName,
+          age,
+          cellphone,
+          email,
+          statusOfProspect: "To call",
+          country,
+          gender,
+          genderComments,
+          interestLevel,
+          reasonForContact,
+          occupation,
+          instagram,
+          linkedin,
+          facebook,
+          tiktok,
+          comments,
+          client,
+          user,
+        });
+
+        return res
+          .status(200)
+          .json([prospect, "Registered prospect successfully"]);
+      } else {
+        return res.status(400).json("Prospect already registered.");
+      }
+    } else {
       const prospect = await prospectsModel.create({
         name,
         lastName,
         age,
         cellphone,
-        email,
         statusOfProspect: "To call",
         country,
         gender,
@@ -93,8 +122,6 @@ const registerProspect = async (req, res) => {
       return res
         .status(200)
         .json([prospect, "Registered prospect successfully"]);
-    } else {
-      return res.status(400).json("Prospect already registered.");
     }
   } catch (error) {
     console.log(error);
