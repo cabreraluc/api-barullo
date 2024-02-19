@@ -28,11 +28,6 @@ const ClientsSchema = Schema(
       type: String,
       default: "active",
     },
-    clientRole: {
-      enum: ["Admin", "Setter", "Closer"],
-      type: String,
-      default: "active",
-    },
 
     dues: {
       type: String,
@@ -41,15 +36,25 @@ const ClientsSchema = Schema(
     totalPayment: {
       type: String,
     },
+    comments: {
+      type: String,
+    },
 
     closer: {
       type: Boolean,
+      default: false,
     },
     setter: {
       type: Boolean,
+      default: false,
     },
     growthPartner: {
       type: Boolean,
+      default: false,
+    },
+    prospects: {
+      type: Schema.Types.ObjectId,
+      ref: "Prospects",
     },
   },
   { timestamps: true }

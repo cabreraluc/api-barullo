@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const getClients = async (req, res) => {
   try {
     const clients = await clientsModel.find({
-      status: "active",
+      status: { $eq: "active" },
     });
 
     if (clients) {
@@ -34,7 +34,20 @@ const getClientById = async (req, res) => {
 };
 
 const registerClient = async (req, res) => {
-  const { name, lastName, email, cellphone, password, clientRole } = req.body;
+  const {
+    name,
+    lastName,
+    email,
+    cellphone,
+    password,
+    bussinesName,
+    totalPayment,
+    dues,
+    comments,
+    closer,
+    setter,
+    growthPartner,
+  } = req.body;
   try {
     const clientEmailRegistered = await clientsModel.findOne({
       email: req.body.email,
@@ -48,7 +61,13 @@ const registerClient = async (req, res) => {
         email,
         cellphone,
         password: passwordHash,
-        clientRole,
+        bussinesName,
+        totalPayment,
+        dues,
+        comments,
+        closer: closer === "checked" ? true : false,
+        setter: setter === "checked" ? true : false,
+        growthPartner: growthPartner === "checked" ? true : false,
       });
       return res.status(200).json([client, "Registered client successfully"]);
     } else {
@@ -90,9 +109,21 @@ const loginClient = async (req, res) => {
 
 const editClient = async (req, res) => {
   const { id } = req.params;
-  const { name, lastName, email, cellphone, password, clientRole } = req.body;
+  const {
+    name,
+    lastName,
+    email,
+    cellphone,
+    password,
+    bussinesName,
+    totalPayment,
+    dues,
+    comments,
+    closer,
+    setter,
+    growthPartner,
+  } = req.body;
 
-  console.log(name, lastName, email, cellphone, password, clientRole);
   try {
     const ClientCheckCellphone = await clientsModel.findOne({ cellphone });
     const clientCheckEmail = await clientsModel.findOne({ email });
@@ -121,7 +152,19 @@ const editClient = async (req, res) => {
     if (password === "") {
       const clientUpdated = await clientModel.findByIdAndUpdate(
         id,
-        { cellphone, lastName, email, name, clientRole },
+        {
+          cellphone,
+          lastName,
+          email,
+          name,
+          bussinesName,
+          totalPayment,
+          dues,
+          comments,
+          closer: closer === "checked" ? true : false,
+          setter: setter === "checked" ? true : false,
+          growthPartner: growthPartner === "checked" ? true : false,
+        },
         {
           new: true,
         }
@@ -138,7 +181,13 @@ const editClient = async (req, res) => {
           name,
           lastName,
           password: passwordHash,
-          clientRole,
+          bussinesName,
+          totalPayment,
+          dues,
+          comments,
+          closer: closer === "checked" ? true : false,
+          setter: setter === "checked" ? true : false,
+          growthPartner: growthPartner === "checked" ? true : false,
         },
         {
           new: true,
