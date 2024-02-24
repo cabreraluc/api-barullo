@@ -1,5 +1,6 @@
 const express = require("express");
 const api = require("./app/api/index");
+const errorHandler = require("./app/middlewares/errorHandler");
 const app = express();
 app.use(express.json());
 const cors = require("cors");
@@ -10,5 +11,6 @@ app.use(
 );
 
 app.use("/api/v1", api);
+app.use(errorHandler);
 
 module.exports = app;

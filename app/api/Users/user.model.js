@@ -25,7 +25,7 @@ const UsersSchema = Schema(
       type: String,
       default: "active",
     },
-    userRole: {
+    role: {
       enum: ["Admin", "Setter", "Closer"],
       type: String,
       default: "active",

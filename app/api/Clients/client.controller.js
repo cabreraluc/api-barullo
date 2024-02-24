@@ -1,9 +1,17 @@
 const clientModel = require("./client.model.js");
 const clientsModel = require("./client.model.js");
 const bcrypt = require("bcrypt");
+const { MODULES, ac } = require("../../utils/accessControl");
 
-const getClients = async (req, res) => {
+const getClients = async (req, res, next) => {
   try {
+    const { role } = req;
+    let permission = ac.can(role).readAny(MODULES.get_clients);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
     const clients = await clientsModel.find({
       status: { $eq: "active" },
     });
@@ -18,9 +26,15 @@ const getClients = async (req, res) => {
   }
 };
 
-const getClientById = async (req, res) => {
+const getClientById = async (req, res, next) => {
   const { id } = req.params;
   try {
+    const { role } = req;
+    let permission = ac.can(role).readAny(MODULES.get_client_by_id);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
     const client = await clientsModel.findById(id);
 
     if (client) {
@@ -33,7 +47,7 @@ const getClientById = async (req, res) => {
   }
 };
 
-const registerClient = async (req, res) => {
+const registerClient = async (req, res, next) => {
   const {
     name,
     lastName,
@@ -49,12 +63,23 @@ const registerClient = async (req, res) => {
     growthPartner,
   } = req.body;
   try {
+    const { role } = req;
+    let permission = ac.can(role).createAny(MODULES.register_client);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
     const clientEmailRegistered = await clientsModel.findOne({
       email: req.body.email,
     });
+
+    const clientCellphoneRegistered = await clientsModel.findOne({
+      cellphone: req.body.cellphone,
+    });
     const passwordHash = await bcrypt.hash(password, 10);
 
-    if (!clientEmailRegistered) {
+    if (!clientEmailRegistered && !clientCellphoneRegistered) {
       const client = await clientsModel.create({
         name,
         lastName,
@@ -71,14 +96,27 @@ const registerClient = async (req, res) => {
       });
       return res.status(200).json([client, "Registered client successfully"]);
     } else {
-      return res.status(400).json("Client already registered.");
+      if (clientCellphoneRegistered) {
+        return res
+          .status(400)
+          .send([
+            ["This cellphone is already registered."],
+            { cellphone: true },
+          ]);
+      }
+
+      if (clientEmailRegistered) {
+        return res
+          .status(400)
+          .send([["This email is already registered."], { email: true }]);
+      }
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-const loginClient = async (req, res) => {
+const loginClient = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const client = await clientsModel.findOne({
@@ -107,7 +145,7 @@ const loginClient = async (req, res) => {
   }
 };
 
-const editClient = async (req, res) => {
+const editClient = async (req, res, next) => {
   const { id } = req.params;
   const {
     name,
@@ -125,6 +163,13 @@ const editClient = async (req, res) => {
   } = req.body;
 
   try {
+    const { role } = req;
+    let permission = ac.can(role).updateAny(MODULES.edit_client);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
     const ClientCheckCellphone = await clientsModel.findOne({ cellphone });
     const clientCheckEmail = await clientsModel.findOne({ email });
 
@@ -201,9 +246,16 @@ const editClient = async (req, res) => {
   }
 };
 
-const disableClient = async (req, res) => {
+const disableClient = async (req, res, next) => {
   const { id } = req.params;
   try {
+    const { role } = req;
+    let permission = ac.can(role).deleteAny(MODULES.disable_client);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
     await clientsModel.findByIdAndUpdate(
       id,
       { status: "disabled" },
