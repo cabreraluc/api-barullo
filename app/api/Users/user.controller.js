@@ -123,13 +123,11 @@ const loginUser = async (req, res, next) => {
           });
           return res.status(200).send({ ...userForJwt, token: jwtToken });
         } else {
-          return res
-            .status(400)
-            .json({ error: "Las contraseñas no coinciden" });
+          return res.status(400).json({ error: "Wrong email or password." });
         }
       });
     } else {
-      return res.status(400).json({ error: "Unregistered user" });
+      return res.status(400).json({ error: "Unregistered user." });
     }
   } catch (error) {
     console.log(error);
