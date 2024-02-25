@@ -1,4 +1,3 @@
-const clientModel = require("./client.model.js");
 const clientsModel = require("./client.model.js");
 const bcrypt = require("bcrypt");
 const { MODULES, ac } = require("../../utils/accessControl");
@@ -20,6 +19,119 @@ const getClients = async (req, res, next) => {
       return res.status(200).json(clients);
     } else {
       return res.status(400).json({ error: "empty" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getClientsPaginate = async (req, res, next) => {
+  try {
+    const { role } = req;
+    const { page, id, search } = req.query;
+    let permission = ac.can(role).readAny(MODULES.get_clients);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    const options = {
+      page: page,
+      limit: 1,
+      sort: { createdAt: "desc" },
+    };
+
+    //////////////////////////
+    if (search !== "undefined") {
+      var regex = new RegExp(search);
+
+      const clientSearchName = await clientsModel.paginate(
+        {
+          name: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (clientSearchName.docs.length) {
+        return res.status(200).json(clientSearchName);
+      }
+      /////////////////////
+      const clientSearchLastName = await clientsModel.paginate(
+        {
+          lastName: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (clientSearchLastName.docs.length) {
+        return res.status(200).json(clientSearchLastName);
+      }
+      /////////////////////
+
+      const clientSearchEmail = await clientsModel.paginate(
+        {
+          email: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (clientSearchEmail.docs.length) {
+        return res.status(200).json(clientSearchEmail);
+      }
+
+      ///////////////////
+      const clientSearchBussinesName = await clientsModel.paginate(
+        {
+          bussinesName: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (clientSearchBussinesName.docs.length) {
+        return res.status(200).json(clientSearchBussinesName);
+      }
+
+      ///////////////////
+
+      const clientSearchNumber = await clientsModel.paginate(
+        {
+          cellphone: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (clientSearchNumber.docs.length) {
+        return res.status(200).json(clientSearchNumber);
+      }
+
+      ///////////////////////
+
+      return res.status(200).json({
+        docs: [],
+        totalDocs: 0,
+        limit: 9,
+        totalPages: 1,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: false,
+        prevPage: null,
+        nextPage: null,
+      });
+    } else {
+      const clients = await clientsModel.paginate(
+        {
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      return res.status(200).json(clients);
     }
   } catch (error) {
     console.log(error);
@@ -274,4 +386,5 @@ module.exports = {
   disableClient,
   getClients,
   getClientById,
+  getClientsPaginate,
 };
