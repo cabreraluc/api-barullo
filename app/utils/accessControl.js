@@ -37,6 +37,11 @@ ac.grant(ROLES.ADMIN)
   // >>>>>>>>>>>>>>> OPERADOR RECAUDADOR ------------------------------------------------------------------------------------------------
 
   .grant(ROLES.CLIENT)
+  .readAny(MODULES.get_prospect_by_id)
+  .readAny(MODULES.get_prospects)
+  .readAny(MODULES.get_prospects_paginate)
+  .readAny(MODULES.get_user_by_id)
+  .readAny(MODULES.get_users)
 
   // >>>>>>>>>>>>>>> OPERADOR POSICION ------------------------------------------------------------------------------------------------
 

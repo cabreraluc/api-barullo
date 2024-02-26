@@ -43,8 +43,14 @@ const getProspectsPaginate = async (req, res, next) => {
       sort: { createdAt: "desc" },
     };
 
-    const query = role !== "Admin" ? { user: id } : {};
+    let query = role !== "Admin" && role !== "Client" ? { user: id } : {};
     console.log(id);
+
+    if (role === "Client") {
+      query.client = id;
+    }
+
+    console.log(query);
 
     //////////////////////////
     if (search !== "undefined") {
@@ -127,6 +133,8 @@ const getProspectsPaginate = async (req, res, next) => {
         },
         options
       );
+
+      console.log(propects);
 
       return res.status(200).json(propects);
     }
