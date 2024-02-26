@@ -5,6 +5,8 @@ const MODULES = {
   edit_prospect: "edit_prospect",
   disable_prospect: "disable_prospect",
   get_prospects_paginate: "get_prospects_paginate",
+  change_prospect_status: "change_prospect_status",
+  change_interest_level: "change_interest_level",
 
   ///////////////////
   get_users: "get_users",

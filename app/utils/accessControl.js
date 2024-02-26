@@ -26,6 +26,8 @@ ac.grant(ROLES.ADMIN)
   .updateAny(MODULES.edit_client)
   .updateAny(MODULES.edit_prospect)
   .updateAny(MODULES.edit_user)
+  .updateAny(MODULES.change_prospect_status)
+  .updateAny(MODULES.change_interest_level)
 
   // DELETE
   .deleteAny(MODULES.disable_client)
@@ -56,7 +58,8 @@ ac.grant(ROLES.ADMIN)
   // UPDATE
   .updateAny(MODULES.edit_client)
   .updateAny(MODULES.edit_prospect)
-
+  .updateAny(MODULES.change_prospect_status)
+  .updateAny(MODULES.change_interest_level)
   // DELETE
   .deleteAny(MODULES.disable_client)
   .deleteAny(MODULES.disable_prospect)
@@ -81,7 +84,8 @@ ac.grant(ROLES.ADMIN)
   // UPDATE
   .updateAny(MODULES.edit_client)
   .updateAny(MODULES.edit_prospect)
-
+  .updateAny(MODULES.change_prospect_status)
+  .updateAny(MODULES.change_interest_level)
   // DELETE
   .deleteAny(MODULES.disable_client)
   .deleteAny(MODULES.disable_prospect);

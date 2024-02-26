@@ -66,8 +66,12 @@ const ProspectsSchema = Schema(
       type: String,
     },
     interestLevel: {
+      enum: ["Very low", "Low", "Medium", "High", "Very high"],
+
       type: String,
+      default: "Medium",
     },
+
     user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
