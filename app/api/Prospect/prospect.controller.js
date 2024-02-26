@@ -163,6 +163,50 @@ const getProspectById = async (req, res, next) => {
   }
 };
 
+const changeProspectStatus = async (req, res, next) => {
+  const { id } = req.params;
+  const { status } = req.query;
+
+  try {
+    const { role } = req;
+    let permission = ac.can(role).updateAny(MODULES.change_prospect_status);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    let prospect = await prospectsModel.findByIdAndUpdate(id, {
+      statusOfProspect: status,
+    });
+
+    return res.status(200).json(["Updated prospect status."]);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const changeInterestLevel = async (req, res, next) => {
+  const { id } = req.params;
+  const { interest } = req.query;
+
+  try {
+    const { role } = req;
+    let permission = ac.can(role).updateAny(MODULES.change_interest_level);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    let prospect = await prospectsModel.findByIdAndUpdate(id, {
+      interestLevel: interest,
+    });
+
+    return res.status(200).json(["Prospect interest level updated."]);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const registerProspect = async (req, res, next) => {
   const {
     name,
@@ -315,4 +359,6 @@ module.exports = {
   disableProspect,
   getProspects,
   getProspectById,
+  changeProspectStatus,
+  changeInterestLevel,
 };
