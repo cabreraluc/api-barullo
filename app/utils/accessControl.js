@@ -9,11 +9,13 @@ ac.grant(ROLES.ADMIN)
 
   // READ
   .readAny(MODULES.get_clients)
+  .readAny(MODULES.get_clients_paginate)
   .readAny(MODULES.get_client_by_id)
   .readAny(MODULES.get_user_by_id)
   .readAny(MODULES.get_users)
   .readAny(MODULES.get_prospect_by_id)
   .readAny(MODULES.get_prospects)
+  .readAny(MODULES.get_prospects_paginate)
 
   // CREATE
   .createAny(MODULES.register_client)
@@ -40,10 +42,12 @@ ac.grant(ROLES.ADMIN)
 
   // READ
   .readAny(MODULES.get_clients)
+  .readAny(MODULES.get_clients_paginate)
   .readAny(MODULES.get_client_by_id)
   .readAny(MODULES.get_users)
   .readAny(MODULES.get_prospect_by_id)
   .readAny(MODULES.get_prospects)
+  .readAny(MODULES.get_prospects_paginate)
   .readAny(MODULES.get_user_by_id)
   // CREATE
   .createAny(MODULES.register_client)
@@ -63,10 +67,12 @@ ac.grant(ROLES.ADMIN)
 
   // READ
   .readAny(MODULES.get_clients)
+  .readAny(MODULES.get_clients_paginate)
   .readAny(MODULES.get_client_by_id)
   .readAny(MODULES.get_users)
   .readAny(MODULES.get_prospect_by_id)
   .readAny(MODULES.get_prospects)
+  .readAny(MODULES.get_prospects_paginate)
   .readAny(MODULES.get_user_by_id)
   // CREATE
   .createAny(MODULES.register_client)

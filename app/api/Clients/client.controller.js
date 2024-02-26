@@ -29,7 +29,7 @@ const getClientsPaginate = async (req, res, next) => {
   try {
     const { role } = req;
     const { page, id, search } = req.query;
-    let permission = ac.can(role).readAny(MODULES.get_clients);
+    let permission = ac.can(role).readAny(MODULES.get_clients_paginate);
 
     if (!permission.granted) {
       return next({ name: "Permission" });
@@ -37,7 +37,7 @@ const getClientsPaginate = async (req, res, next) => {
 
     const options = {
       page: page,
-      limit: 1,
+      limit: 7,
       sort: { createdAt: "desc" },
     };
 

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Schema = mongoose.Schema;
 
 const ProspectsSchema = Schema(
@@ -79,5 +79,7 @@ const ProspectsSchema = Schema(
   },
   { timestamps: true }
 );
+
+ProspectsSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Prospects", ProspectsSchema);
