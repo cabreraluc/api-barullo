@@ -27,6 +27,114 @@ const getProspects = async (req, res, next) => {
   }
 };
 
+const getProspectsPaginate = async (req, res, next) => {
+  try {
+    const { role } = req;
+    const { page, id, search } = req.query;
+    let permission = ac.can(role).readAny(MODULES.get_prospects_paginate);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    const options = {
+      page: page,
+      limit: 7,
+      sort: { createdAt: "desc" },
+    };
+
+    const query = role !== "Admin" ? { user: id } : {};
+    console.log(id);
+
+    //////////////////////////
+    if (search !== "undefined") {
+      var regex = new RegExp(search);
+
+      const prospectSearchName = await prospectsModel.paginate(
+        {
+          ...query,
+          name: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (prospectSearchName.docs.length) {
+        return res.status(200).json(prospectSearchName);
+      }
+      /////////////////////
+      const prospectSearchLastname = await prospectsModel.paginate(
+        {
+          ...query,
+          lastName: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (prospectSearchLastname.docs.length) {
+        return res.status(200).json(prospectSearchLastname);
+      }
+      /////////////////////
+
+      const prospectSearchEmail = await prospectsModel.paginate(
+        {
+          ...query,
+          email: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (prospectSearchEmail.docs.length) {
+        return res.status(200).json(prospectSearchEmail);
+      }
+
+      ///////////////////
+
+      const prospectSearchNumber = await prospectsModel.paginate(
+        {
+          ...query,
+          cellphone: { $regex: regex, $options: "i" },
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      if (prospectSearchNumber.docs.length) {
+        return res.status(200).json(prospectSearchNumber);
+      }
+
+      ///////////////////////
+
+      return res.status(200).json({
+        docs: [],
+        totalDocs: 0,
+        limit: 9,
+        totalPages: 1,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: false,
+        prevPage: null,
+        nextPage: null,
+      });
+    } else {
+      const propects = await prospectsModel.paginate(
+        {
+          ...query,
+          status: { $eq: "active" },
+        },
+        options
+      );
+
+      return res.status(200).json(propects);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getProspectById = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -202,7 +310,7 @@ const disableProspect = async (req, res, next) => {
 };
 module.exports = {
   registerProspect,
-
+  getProspectsPaginate,
   editProspect,
   disableProspect,
   getProspects,
