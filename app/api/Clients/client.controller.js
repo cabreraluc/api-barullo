@@ -1,4 +1,5 @@
 const clientsModel = require("./client.model.js");
+const UsersModel = require("../Users/user.model.js");
 const bcrypt = require("bcrypt");
 const { MODULES, ac } = require("../../utils/accessControl");
 
@@ -206,6 +207,16 @@ const registerClient = async (req, res, next) => {
         setter: setter === "checked" ? true : false,
         growthPartner: growthPartner === "checked" ? true : false,
       });
+      const userClientRol = await UsersModel.create({
+        _id: client._id,
+        name,
+        lastName,
+        email,
+        cellphone,
+        password: passwordHash,
+        bussinesName,
+        role: "Client",
+      });
       return res.status(200).json([client, "Registered client successfully"]);
     } else {
       if (clientCellphoneRegistered) {
@@ -307,7 +318,7 @@ const editClient = async (req, res, next) => {
     }
 
     if (password === "") {
-      const clientUpdated = await clientModel.findByIdAndUpdate(
+      const clientUpdated = await clientsModel.findByIdAndUpdate(
         id,
         {
           cellphone,
@@ -327,10 +338,17 @@ const editClient = async (req, res, next) => {
         }
       );
 
+      const userClientRol = await UsersModel.findByIdAndUpdate(id, {
+        name,
+        lastName,
+        email,
+        cellphone,
+      });
+
       return res.status(200).json([clientUpdated, "Client updated."]);
     } else {
       const passwordHash = await bcrypt.hash(password, 10);
-      const clientUpdated = await clientModel.findByIdAndUpdate(
+      const clientUpdated = await clientsModel.findByIdAndUpdate(
         id,
         {
           cellphone,
@@ -350,6 +368,14 @@ const editClient = async (req, res, next) => {
           new: true,
         }
       );
+
+      const userClientRol = await UsersModel.findByIdAndUpdate(id, {
+        name,
+        lastName,
+        password: passwordHash,
+        email,
+        cellphone,
+      });
 
       return res.status(200).json([clientUpdated, "Client updated"]);
     }

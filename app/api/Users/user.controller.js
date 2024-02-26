@@ -15,6 +15,7 @@ const getUsers = async (req, res, next) => {
 
     const users = await usersModel.find({
       status: "active",
+      role: { $ne: "Client" },
     });
 
     if (users) {
