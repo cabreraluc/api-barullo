@@ -9,8 +9,10 @@ ac.grant(ROLES.ADMIN)
 
   // READ
   .readAny(MODULES.get_clients)
+  .readAny(MODULES.get_activities)
   .readAny(MODULES.get_clients_paginate)
   .readAny(MODULES.get_client_by_id)
+  .readAny(MODULES.get_activity_by_id)
   .readAny(MODULES.get_user_by_id)
   .readAny(MODULES.get_users)
   .readAny(MODULES.get_prospect_by_id)
@@ -21,9 +23,11 @@ ac.grant(ROLES.ADMIN)
   .createAny(MODULES.register_client)
   .createAny(MODULES.register_prospect)
   .createAny(MODULES.register_user)
+  .createAny(MODULES.register_activity)
 
   // UPDATE
   .updateAny(MODULES.edit_client)
+  .updateAny(MODULES.edit_activity)
   .updateAny(MODULES.edit_prospect)
   .updateAny(MODULES.edit_user)
   .updateAny(MODULES.change_prospect_status)
@@ -33,6 +37,7 @@ ac.grant(ROLES.ADMIN)
   .deleteAny(MODULES.disable_client)
   .deleteAny(MODULES.disable_prospect)
   .deleteAny(MODULES.disable_user)
+  .deleteAny(MODULES.archive_activity)
 
   // >>>>>>>>>>>>>>> OPERADOR RECAUDADOR ------------------------------------------------------------------------------------------------
 

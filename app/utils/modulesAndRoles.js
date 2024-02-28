@@ -23,6 +23,13 @@ const MODULES = {
   edit_client: "edit_client",
   disable_client: "disable_client",
   get_clients_paginate: "get_clients_paginate",
+
+  /////////////////////
+  register_activity: "register_activity",
+  get_activity_by_id: "get_activity_by_id",
+  get_activities: "get_activities",
+  edit_activity: "edit_activity",
+  archive_activity: "archive_activity",
 };
 
 const ROLES = {
