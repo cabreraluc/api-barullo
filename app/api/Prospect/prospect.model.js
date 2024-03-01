@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Schema = mongoose.Schema;
 
 const ProspectsSchema = Schema(
@@ -66,8 +66,12 @@ const ProspectsSchema = Schema(
       type: String,
     },
     interestLevel: {
+      enum: ["Very low", "Low", "Medium", "High", "Very high"],
+
       type: String,
+      default: "Medium",
     },
+
     user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
@@ -79,5 +83,7 @@ const ProspectsSchema = Schema(
   },
   { timestamps: true }
 );
+
+ProspectsSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Prospects", ProspectsSchema);
