@@ -18,6 +18,7 @@ ac.grant(ROLES.ADMIN)
   .readAny(MODULES.get_prospect_by_id)
   .readAny(MODULES.get_prospects)
   .readAny(MODULES.get_prospects_paginate)
+  .readAny(MODULES.get_activities_by_day)
 
   // CREATE
   .createAny(MODULES.register_client)

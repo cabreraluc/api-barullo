@@ -55,6 +55,46 @@ const getActivityById = async (req, res, next) => {
   }
 };
 
+const getActivitiesByDay = async (req, res, next) => {
+  const { date } = req.query;
+  try {
+    const { role } = req;
+    let permission = ac.can(role).readAny(MODULES.get_activities_by_day);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    console.log(date, "dateeeee");
+    let dateToFormat = new Date(date);
+    let formattedDate = dateToFormat.toISOString().slice(0, 10);
+
+    console.log(formattedDate, "formaaaaaaaaaaated dateeeee");
+
+    var regex = new RegExp(formattedDate);
+    const activity = await CalendarModel.find({
+      start: { $regex: regex, $options: "i" },
+    })
+      .sort({ start: 1 })
+      .populate({
+        path: "prospect",
+        populate: {
+          path: "client",
+        },
+      });
+
+    console.log(activity);
+
+    if (activity) {
+      return res.status(200).json(activity);
+    } else {
+      return res.status(400).json(["The activity does not exist"]);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const registerActivity = async (req, res, next) => {
   const { title, prospect, start, end, allDay, details } = req.body;
   try {
@@ -183,4 +223,5 @@ module.exports = {
   archiveActivity,
   getActivities,
   getActivityById,
+  getActivitiesByDay,
 };

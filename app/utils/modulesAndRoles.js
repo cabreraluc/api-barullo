@@ -27,6 +27,7 @@ const MODULES = {
   /////////////////////
   register_activity: "register_activity",
   get_activity_by_id: "get_activity_by_id",
+  get_activities_by_day: "get_activities_by_day",
   get_activities: "get_activities",
   edit_activity: "edit_activity",
   archive_activity: "archive_activity",

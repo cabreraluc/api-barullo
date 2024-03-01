@@ -22,7 +22,7 @@ const CalendarSchema = Schema(
       type: Boolean,
     },
     status: {
-      enum: ["archive", "active"],
+      enum: ["archive", "active", "finalized"],
       type: String,
       default: "active",
     },
