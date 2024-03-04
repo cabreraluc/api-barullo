@@ -30,6 +30,10 @@ const CalendarSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Prospects",
     },
+    client: {
+      type: Schema.Types.ObjectId,
+      ref: "Clients",
+    },
     // user: {
     //   type: Schema.Types.ObjectId,
     //   ref: "users",

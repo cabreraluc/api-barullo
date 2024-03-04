@@ -77,11 +77,13 @@ const getActivitiesByDay = async (req, res, next) => {
     })
       .sort({ start: 1 })
       .populate({
+        path: "client",
         path: "prospect",
         populate: {
           path: "client",
         },
-      });
+      })
+      .populate("client");
 
     console.log(activity);
 
@@ -96,7 +98,7 @@ const getActivitiesByDay = async (req, res, next) => {
 };
 
 const registerActivity = async (req, res, next) => {
-  const { title, prospect, start, end, allDay, details } = req.body;
+  const { title, prospect, start, end, allDay, details, client } = req.body;
   try {
     const { role } = req;
     let permission = ac.can(role).createAny(MODULES.register_activity);
@@ -138,6 +140,7 @@ const registerActivity = async (req, res, next) => {
       allDay,
       prospect: prospect._id,
       details,
+      client: client._id,
     });
     return res.status(200).json([Activity, "Registered activity successfully"]);
     // } else {
