@@ -5,6 +5,9 @@ const { MODULES, ac } = require("../../utils/accessControl");
 const calendarModel = require("./calendar.model.js");
 
 const getActivities = async (req, res, next) => {
+  let clientId = req.params.id;
+  const prospectId = req.query.prospect;
+
   try {
     const { role } = req;
     let permission = ac.can(role).readAny(MODULES.get_activities);
@@ -13,9 +16,30 @@ const getActivities = async (req, res, next) => {
       return next({ name: "Permission" });
     }
 
-    const activities = await CalendarModel.find({
-      status: { $eq: "active" },
-    });
+    if (role === "Client") {
+      clientId = req.userId;
+    }
+
+    let query = {
+      $or: [],
+    };
+
+    if (clientId !== "undefined") {
+      query.$or.push({ client: clientId, status: "active" });
+      query.$or.push({ "prospect.client": clientId, status: "active" });
+    }
+    if (prospectId !== "undefined") {
+      query.$or = [];
+      query.$or.push({ prospect: prospectId, status: "active" });
+    }
+
+    if (prospectId === "undefined" && clientId === "undefined") {
+      query = {
+        status: { $eq: "active" },
+      };
+    }
+
+    activities = await CalendarModel.find(query);
 
     if (activities) {
       const activitiesResponse = activities.map((e) => {
@@ -56,7 +80,9 @@ const getActivityById = async (req, res, next) => {
 };
 
 const getActivitiesByDay = async (req, res, next) => {
-  const { date } = req.query;
+  const { date, prospect } = req.query;
+  let client = req.query.client;
+
   try {
     const { role } = req;
     let permission = ac.can(role).readAny(MODULES.get_activities_by_day);
@@ -65,16 +91,51 @@ const getActivitiesByDay = async (req, res, next) => {
       return next({ name: "Permission" });
     }
 
-    console.log(date, "dateeeee");
-    let dateToFormat = new Date(date);
+    if (role === "Client") {
+      client = req.userId;
+    }
+    let dateToFormat = date !== "undefined" ? new Date(date) : new Date();
     let formattedDate = dateToFormat.toISOString().slice(0, 10);
-
-    console.log(formattedDate, "formaaaaaaaaaaated dateeeee");
+    console.log(formattedDate, "formattedDate");
 
     var regex = new RegExp(formattedDate);
-    const activity = await CalendarModel.find({
-      start: { $regex: regex, $options: "i" },
-    })
+
+    let query = {
+      $or: [],
+    };
+
+    if (client !== "undefined") {
+      console.log("ENTRO ACCAAAAAS CLIENTTT");
+      query.$or.push({
+        client: client,
+        status: "active",
+        start: { $regex: regex, $options: "i" },
+      });
+      query.$or.push({
+        "prospect.client": client,
+        status: "active",
+        start: { $regex: regex, $options: "i" },
+      });
+    }
+
+    if (prospect !== "undefined") {
+      console.log("ENTRO ACCAAAAAS PROSPECTTT");
+      query.$or = [];
+      query.$or.push({
+        prospect: prospect,
+        start: { $regex: regex, $options: "i" },
+        status: "active",
+      });
+    }
+
+    if (prospect === "undefined" && client === "undefined") {
+      console.log("ENTRO ACCAAAAAS");
+      query = {
+        start: { $regex: regex, $options: "i" },
+        status: "active",
+      };
+    }
+    const activity = await CalendarModel.find(query)
       .sort({ start: 1 })
       .populate({
         path: "client",
@@ -84,8 +145,6 @@ const getActivitiesByDay = async (req, res, next) => {
         },
       })
       .populate("client");
-
-    console.log(activity);
 
     if (activity) {
       return res.status(200).json(activity);
@@ -107,31 +166,6 @@ const registerActivity = async (req, res, next) => {
       return next({ name: "Permission" });
     }
 
-    // const clientEmailRegistered = await CalendarModel.findOne({
-    //   id: id,
-    // });
-
-    // const clientCellphoneRegistered = await clientsModel.findOne({
-    //   cellphone: req.body.cellphone,
-    // });
-    // const passwordHash = await bcrypt.hash(password, 10);
-
-    // if (!clientEmailRegistered && !clientCellphoneRegistered) {
-    //   const client = await clientsModel.create({
-    //     name,
-    //     lastName,
-    //     email,
-    //     cellphone,
-    //     password: passwordHash,
-    //     bussinesName,
-    //     totalPayment,
-    //     dues,
-    //     comments,
-    //     closer: closer === "checked" ? true : false,
-    //     setter: setter === "checked" ? true : false,
-    //     growthPartner: growthPartner === "checked" ? true : false,
-    //   });
-
     console.log(start, end);
     const Activity = await CalendarModel.create({
       title,
@@ -143,22 +177,6 @@ const registerActivity = async (req, res, next) => {
       client: client._id,
     });
     return res.status(200).json([Activity, "Registered activity successfully"]);
-    // } else {
-    //   if (clientCellphoneRegistered) {
-    //     return res
-    //       .status(400)
-    //       .send([
-    //         ["This cellphone is already registered."],
-    //         { cellphone: true },
-    //       ]);
-    //   }
-
-    //   if (clientEmailRegistered) {
-    //     return res
-    //       .status(400)
-    //       .send([["This email is already registered."], { email: true }]);
-    //   }
-    // }
   } catch (error) {
     console.log(error);
   }
@@ -209,11 +227,13 @@ const archiveActivity = async (req, res, next) => {
       return next({ name: "Permission" });
     }
 
-    await clientsModel.findByIdAndUpdate(
+    await CalendarModel.findByIdAndUpdate(
       id,
       { status: "disabled" },
       { new: true }
     );
+
+    console.log("archivado");
 
     return res.status(200).json(["Client Disabled."]);
   } catch (error) {

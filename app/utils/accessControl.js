@@ -48,6 +48,9 @@ ac.grant(ROLES.ADMIN)
   .readAny(MODULES.get_prospects_paginate)
   .readAny(MODULES.get_user_by_id)
   .readAny(MODULES.get_users)
+  .readAny(MODULES.get_activities)
+  .readAny(MODULES.get_activity_by_id)
+  .readAny(MODULES.get_activities_by_day)
 
   // >>>>>>>>>>>>>>> OPERADOR POSICION ------------------------------------------------------------------------------------------------
 
