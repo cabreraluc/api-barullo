@@ -6,6 +6,7 @@ const prospects = require("./Prospect/prospect.route");
 const secondClients = require("./SecondClient/secondClient.route");
 const calendar = require("./Calendar/calendar.route");
 const artists = require("./Artists/artist.route");
+const payment = require("./Payment/payment.route");
 
 router.use("/users", users);
 router.use("/artists", artists);
@@ -14,5 +15,6 @@ router.use("/products", products);
 router.use("/prospects", prospects);
 router.use("/calendar", calendar);
 router.use("/secondClients", secondClients);
+router.use("/payment", payment);
 
 module.exports = router;
