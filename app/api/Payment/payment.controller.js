@@ -55,8 +55,8 @@ const createPreference = async (req, res) => {
 
 const sendInfo = async (req, res) => {
   const paymentId = req.body.data.id;
-  console.log(req.query["data.id"], "QUERY");
-  console.log(req.body, "BODY");
+  // console.log(req.query["data.id"], "QUERY");
+  // console.log(req.body, "BODY");
   try {
     const response = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
@@ -78,6 +78,7 @@ const sendInfo = async (req, res) => {
       });
 
       if (!paymentClientExist) {
+        console.log("paymentdontexist!");
         const newPaymentClient = await PaymentModel.create({
           name: data.additional_info.payer.first_name,
           email: clientEmail,
@@ -89,7 +90,9 @@ const sendInfo = async (req, res) => {
 
         console.log(newPaymentClient);
 
-        const qrCode = qr.imageSync(newPaymentClient, { type: "png" });
+        const qrCode = qr.imageSync(JSON.stringify(newPaymentClient), {
+          type: "png",
+        });
 
         const transporter = nodemailer.createTransport({
           service: "gmail",
