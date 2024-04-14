@@ -52,8 +52,8 @@ const createPreference = async (req, res) => {
 };
 
 const sendInfo = async (req, res) => {
-  const paymentId = req.query.data.id;
-  console.log(req.query, "QUERY");
+  const paymentId = req.body.data.id;
+  console.log(req.query["data.id"], "QUERY");
   console.log(req.body, "BODY");
   try {
     const response = await fetch(
