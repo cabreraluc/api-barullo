@@ -73,48 +73,55 @@ const sendInfo = async (req, res) => {
       const description = data.additional_info.items[0].title;
       const clientEmail = data.additional_info.payer.last_name;
 
-      const newPaymentClient = await PaymentModel.create({
-        name: data.additional_info.payer.first_name,
-        email: clientEmail,
-        description: description,
+      const paymentClientExist = await PaymentModel.find({
+        paymentId: paymentId,
       });
 
-      const qrCode = qr.imageSync(newPaymentClient._id, { type: "png" });
+      if (!paymentClientExist) {
+        const newPaymentClient = await PaymentModel.create({
+          name: data.additional_info.payer.first_name,
+          email: clientEmail,
+          description: description,
+          paymentId: paymentId,
+        });
 
-      // Guardar en la base de datos MongoDB (asumiendo que tienes una instancia de MongoDB configurada)
-      // Aquí puedes usar una librería como mongoose para interactuar con MongoDB
+        newPaymentClient.save();
 
-      // Enviar correo electrónico con el código QR adjunto
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "lucasanbo@gmail.com",
-          pass: "rigmuhweonsejnlj",
-        },
-      });
+        console.log(newPaymentClient);
 
-      const mailOptions = {
-        from: "lucasanbo@gmail.com",
-        to: clientEmail,
-        subject: "Código QR de tu transacción",
-        text: "Adjuntamos el código QR de tu transacción.",
-        attachments: [
-          {
-            filename: "qr-code.png",
-            content: qrCode,
+        const qrCode = qr.imageSync(newPaymentClient, { type: "png" });
+
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "lucasanbo@gmail.com",
+            pass: "rigmuhweonsejnlj",
           },
-        ],
-      };
+        });
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Error al enviar el correo electrónico:", error);
-        } else {
-          console.log("Correo electrónico enviado:", info.response);
-        }
-      });
+        const mailOptions = {
+          from: "lucasanbo@gmail.com",
+          to: clientEmail,
+          subject: "Código QR de tu transacción",
+          text: "Adjuntamos el código QR de tu transacción.",
+          attachments: [
+            {
+              filename: "qr-code.png",
+              content: qrCode,
+            },
+          ],
+        };
 
-      res.status(200).end();
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error al enviar el correo electrónico:", error);
+          } else {
+            console.log("Correo electrónico enviado:", info.response);
+          }
+        });
+
+        res.status(200).end();
+      }
     }
   } catch (error) {
     console.log(error);
