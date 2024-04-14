@@ -84,11 +84,11 @@ const sendInfo = async (req, res) => {
         },
       });
 
-      const clientEmail = data.additional_info.items[0].last_name;
+      console.log(data.additional_info.items[0]);
 
       const mailOptions = {
         from: "lucasanbo@gmail.com",
-        to: clientEmail,
+        to: "cabreralucaspatricio@gmail.com",
         subject: "Código QR de tu transacción",
         text: "Adjuntamos el código QR de tu transacción.",
         attachments: [
