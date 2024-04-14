@@ -68,7 +68,6 @@ const sendInfo = async (req, res) => {
     );
     if (response) {
       const data = await response.json();
-      console.log(data);
 
       const qrCode = qr.imageSync(`yaestafunca`, { type: "png" });
 
@@ -84,7 +83,7 @@ const sendInfo = async (req, res) => {
         },
       });
 
-      console.log(data.additional_info.items[0]);
+      console.log(data.additional_info, "ADITIONALINFO");
 
       const mailOptions = {
         from: "lucasanbo@gmail.com",
