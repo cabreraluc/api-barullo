@@ -1,5 +1,5 @@
 const { MercadoPagoConfig, Preference } = require("mercadopago");
-const qr = require("qr");
+const qr = require("qr-image");
 const nodemailer = require("nodemailer");
 // Agrega credenciales
 
