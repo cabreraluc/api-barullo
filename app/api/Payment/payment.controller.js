@@ -1,4 +1,6 @@
 const { MercadoPagoConfig, Preference } = require("mercadopago");
+const qr = require("qr");
+const nodemailer = require("nodemailer");
 // Agrega credenciales
 
 const client = new MercadoPagoConfig({
@@ -67,6 +69,43 @@ const sendInfo = async (req, res) => {
     if (response) {
       const data = await response.json();
       console.log(data);
+
+      const qrCode = qr.imageSync(`yaestafunca`, { type: "png" });
+
+      // Guardar en la base de datos MongoDB (asumiendo que tienes una instancia de MongoDB configurada)
+      // Aquí puedes usar una librería como mongoose para interactuar con MongoDB
+
+      // Enviar correo electrónico con el código QR adjunto
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "lucasanbo@gmail.com",
+          pass: "Esteesmisamsunga12",
+        },
+      });
+
+      const mailOptions = {
+        from: "lucasanbo@gmail.com",
+        to: clientEmail,
+        subject: "Código QR de tu transacción",
+        text: "Adjuntamos el código QR de tu transacción.",
+        attachments: [
+          {
+            filename: "qr-code.png",
+            content: qrCode,
+          },
+        ],
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error al enviar el correo electrónico:", error);
+        } else {
+          console.log("Correo electrónico enviado:", info.response);
+        }
+      });
+
+      res.status(200).end();
     }
   } catch (error) {
     console.log(error);
