@@ -17,6 +17,9 @@ const PaymentSchema = Schema(
       type: Boolean,
       default: false,
     },
+    paymentId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

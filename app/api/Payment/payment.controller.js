@@ -113,7 +113,7 @@ const sendInfo = async (req, res) => {
           text: "Adjuntamos el código QR de tu transacción.",
           attachments: [
             {
-              filename: "qr-code.png",
+              filename: "barullo_qr.png",
               content: qrCode,
             },
           ],
