@@ -84,7 +84,7 @@ const sendInfo = async (req, res) => {
         },
       });
 
-      const clientEmail = response.additional_info.items[0].last_name;
+      const clientEmail = data.additional_info.items[0].last_name;
 
       const mailOptions = {
         from: "lucasanbo@gmail.com",
