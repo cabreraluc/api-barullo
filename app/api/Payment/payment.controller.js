@@ -3,7 +3,7 @@ const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const client = new MercadoPagoConfig({
   accessToken:
-    "APP_USR-6828749209662679-041212-c366caefca4c9d43cc92a12bdfdb6ff1-525781070",
+    "TEST-6828749209662679-041212-2b33879f280380bd637ef27f9731848b-525781070c",
 });
 
 const createPreference = async (req, res) => {
@@ -13,7 +13,8 @@ const createPreference = async (req, res) => {
     price,
     amount,
     description,
-    completeName,
+    name,
+    lastName,
     email,
     cellphone,
   } = req.body;
@@ -28,6 +29,16 @@ const createPreference = async (req, res) => {
               unit_price: Number(price),
             },
           ],
+          payer: {
+            email: email,
+            name: name,
+            lastName: lastName,
+          },
+          back_urls: {
+            success: "https://www.success.com",
+            failure: "https://www.failure.com",
+            pending: "https://www.pending.com",
+          },
         },
       })
       .then((response) => {
@@ -40,6 +51,11 @@ const createPreference = async (req, res) => {
   }
 };
 
+const sendInfo = async (req, res) => {
+  console.log(req.body);
+};
+
 module.exports = {
   createPreference,
+  sendInfo,
 };
