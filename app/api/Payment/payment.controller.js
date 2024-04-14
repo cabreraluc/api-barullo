@@ -70,6 +70,8 @@ const sendInfo = async (req, res) => {
     if (response) {
       const data = await response.json();
 
+      console.log("hayrespuesta!");
+
       const description = data.additional_info.items[0].title;
       const clientEmail = data.additional_info.payer.last_name;
 
