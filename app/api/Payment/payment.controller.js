@@ -65,7 +65,7 @@ const sendInfo = async (req, res) => {
       }
     );
 
-    if (response.ok) {
+    if (response) {
       const data = await response.json();
       console.log(data);
     }
