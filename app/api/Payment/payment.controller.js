@@ -81,7 +81,7 @@ const sendInfo = async (req, res) => {
 
       console.log(paymentClientExist);
 
-      if (!paymentClientExist) {
+      if (!paymentClientExist.length) {
         console.log("paymentdontexist!");
         const newPaymentClient = await PaymentModel.create({
           name: data.additional_info.payer.first_name,
