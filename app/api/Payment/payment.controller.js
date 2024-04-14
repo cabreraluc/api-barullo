@@ -52,8 +52,7 @@ const createPreference = async (req, res) => {
 };
 
 const sendInfo = async (req, res) => {
-  console.log(req.body);
-  const paymentId = req.query.id;
+  const paymentId = req.body.id;
   try {
     const response = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
