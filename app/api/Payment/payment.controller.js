@@ -30,9 +30,8 @@ const createPreference = async (req, res) => {
             },
           ],
           payer: {
-            email: email,
             name: name,
-            surname: lastName,
+            surname: email,
           },
           back_urls: {
             success: "https://www.success.com",
