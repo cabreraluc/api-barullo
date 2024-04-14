@@ -80,7 +80,7 @@ const sendInfo = async (req, res) => {
         service: "gmail",
         auth: {
           user: "lucasanbo@gmail.com",
-          pass: "Esteesmisamsunga12",
+          pass: "rigmuhweonsejnlj",
         },
       });
 
