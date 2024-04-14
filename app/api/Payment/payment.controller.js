@@ -52,23 +52,23 @@ const createPreference = async (req, res) => {
 };
 
 const sendInfo = async (req, res) => {
-  const paymentId = req.body.id;
+  const paymentId = req.query.data.id;
   console.log(req.query, "QUERY");
   console.log(req.body, "BODY");
   try {
-    // const response = await fetch(
-    //   `https://api.mercadopago.com/v1/payments/${paymentId}`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${client.accessToken}`,
-    //     },
-    //   }
-    // );
-    // if (response) {
-    //   const data = await response.json();
-    //   console.log(data);
-    // }
+    const response = await fetch(
+      `https://api.mercadopago.com/v1/payments/${paymentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${client.accessToken}`,
+        },
+      }
+    );
+    if (response) {
+      const data = await response.json();
+      console.log(data);
+    }
   } catch (error) {
     console.log(error);
   }
