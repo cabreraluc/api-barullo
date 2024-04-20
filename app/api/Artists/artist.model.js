@@ -16,10 +16,37 @@ const ArtistsSchema = Schema(
     artistName: {
       type: String,
     },
+    secondaryArtistName: {
+      type: String,
+    },
     shortDescription: {
       type: String,
     },
     description: {
+      type: String,
+    },
+    soundCloud: {
+      type: String,
+    },
+    instagram: {
+      type: String,
+    },
+    youtube: {
+      type: String,
+    },
+    spotify: {
+      type: String,
+    },
+    soundCloudSecondary: {
+      type: String,
+    },
+    instagramSecondary: {
+      type: String,
+    },
+    youtubeSecondary: {
+      type: String,
+    },
+    spotifySecondary: {
       type: String,
     },
     primaryImage: {
