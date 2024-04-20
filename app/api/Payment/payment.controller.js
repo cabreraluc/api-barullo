@@ -37,9 +37,9 @@ const createPreference = async (req, res) => {
             surname: email,
           },
           back_urls: {
-            success: "https://www.success.com",
-            failure: "https://www.failure.com",
-            pending: "https://www.pending.com",
+            success: "https://www.barulloworld.com",
+            failure: "https://www.barulloworld.com",
+            pending: "https://www.barulloworld.com",
           },
         },
       })
@@ -109,8 +109,8 @@ const sendInfo = async (req, res) => {
         const mailOptions = {
           from: "lucasanbo@gmail.com",
           to: clientEmail,
-          subject: "Código QR de tu transacción",
-          text: "Adjuntamos el código QR de tu transacción.",
+          subject: "Barullo ticket",
+          text: "Muchas gracias por tu compra, adjuntamos el código QR que necesitaras para acceder al evento",
           attachments: [
             {
               filename: "barullo_qr.png",
