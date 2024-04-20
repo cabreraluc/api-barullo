@@ -107,10 +107,10 @@ const sendInfo = async (req, res) => {
         });
 
         const mailOptions = {
-          from: "lucasanbo@gmail.com",
+          from: "barulloinc@gmail.com",
           to: clientEmail,
           subject: "Barullo ticket",
-          text: "Muchas gracias por tu compra, adjuntamos el código QR que necesitaras para acceder al evento",
+          text: "Muchas gracias por tu compra, adjuntamos el código QR que necesitaras para acceder al evento, la ubicación es la siguiente: https://maps.app.goo.gl/Ub4Zbu8gz4h7xaQD9",
           attachments: [
             {
               filename: "barullo_qr.png",
