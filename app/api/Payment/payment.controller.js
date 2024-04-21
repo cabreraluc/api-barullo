@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 
 const client = new MercadoPagoConfig({
   accessToken:
-    "APP_USR-6828749209662679-041212-c366caefca4c9d43cc92a12bdfdb6ff1-525781070",
+    "APP_USR-8740049470823933-042020-1417aafba9ae03fd5f3db7a91e13a064-359374298",
 });
 
 const createPreference = async (req, res) => {
@@ -110,7 +110,7 @@ const sendInfo = async (req, res) => {
           from: "barulloinc@gmail.com",
           to: clientEmail,
           subject: "Barullo ticket",
-          text: "Muchas gracias por tu compra, adjuntamos el código QR que necesitaras para acceder al evento, la ubicación es la siguiente: https://maps.app.goo.gl/Ub4Zbu8gz4h7xaQD9",
+          text: "Muchas gracias por tu compra, adjuntamos el código QR que necesitaras para acceder al evento. La ubicación es la siguiente: https://maps.app.goo.gl/Ub4Zbu8gz4h7xaQD9",
           attachments: [
             {
               filename: "barullo_qr.png",
