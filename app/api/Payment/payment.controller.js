@@ -137,7 +137,31 @@ const sendInfo = async (req, res) => {
   return res.status(200);
 };
 
+const getPaymentByQr = async (req, res) => {
+  const paymentId = req.params.id;
+  try {
+    const payment = await PaymentModel.findById(paymentId);
+    if (!payment) {
+      return res.status(404).json({
+        message: "Payment not found",
+      });
+    } else {
+      payment.scanned = true;
+      payment.save();
+      return res.status(200).json({
+        message: "Payment found",
+        payment,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500);
+  }
+};
+
 module.exports = {
   createPreference,
   sendInfo,
+  getPaymentByQr,
 };
