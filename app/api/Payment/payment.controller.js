@@ -142,14 +142,19 @@ const getPaymentByQr = async (req, res) => {
   try {
     const payment = await PaymentModel.findById(paymentId);
     if (!payment) {
-      return res.status(404).json({
-        message: "Payment not found",
+      return res.status(200).json({
+        message: "PAGO NO ENCONTRADO",
+      });
+    } else if (payment.scanned) {
+      return res.status(200).json({
+        message: "ESTE PAGO YA FUE ESCANEADO",
+        payment,
       });
     } else {
       payment.scanned = true;
       payment.save();
       return res.status(200).json({
-        message: "Payment found",
+        message: "PAGO ENCONTRADO",
         payment,
       });
     }
