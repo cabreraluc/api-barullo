@@ -29,6 +29,7 @@
     "qr-image": "^3.2.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.9",
     "nodemon": "^3.0.3",
     "standard": "^17.0.0"
   }

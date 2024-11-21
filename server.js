@@ -9,7 +9,7 @@ app.use(cors());
 async function initApp(appConfig, dbConfig) {
   try {
     connectDb(dbConfig);
-    app.listen(appConfig.port, () =>
+    app.listen(appConfig.port, "0.0.0.0", () =>
       console.log(`listen on ${appConfig.port}`)
     );
   } catch (error) {
