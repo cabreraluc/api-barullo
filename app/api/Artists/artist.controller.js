@@ -16,9 +16,11 @@ const getArtists = async (req, res, next) => {
     //   return next({ name: "Permission" });
     // }
 
-    const artists = await artistsModel.find({
-      role: { $ne: "Client" },
-    });
+    const artists = await artistsModel
+      .find({
+        role: { $ne: "Client" },
+      })
+      .sort({ updatedAt: -1 });
 
     if (artists) {
       return res.status(200).json(artists);
