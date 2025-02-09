@@ -55,6 +55,9 @@ const ArtistsSchema = Schema(
     secondaryImage: {
       type: String,
     },
+    eventDate: {
+      type: String,
+    },
     status: {
       enum: ["disabled", "active"],
 

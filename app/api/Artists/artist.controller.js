@@ -72,6 +72,7 @@ const registerArtist = async (req, res, next) => {
     instagramSecondary,
     youtubeSecondary,
     spotifySecondary,
+    eventDate,
   } = req.body;
 
   console.log(req.body);
@@ -82,8 +83,6 @@ const registerArtist = async (req, res, next) => {
     if (!permission.granted) {
       return next({ name: "Permission" });
     }
-
-    console.log(req, "files console.log");
 
     const artistCellphoneRegistered = await artistsModel.findOne({ cellphone });
 
@@ -109,6 +108,7 @@ const registerArtist = async (req, res, next) => {
         instagramSecondary,
         youtubeSecondary,
         spotifySecondary,
+        eventDate,
       });
 
       // Guardar el nuevo artista en la base de datos
@@ -183,8 +183,10 @@ const editArtist = async (req, res, next) => {
     instagramSecondary,
     youtubeSecondary,
     spotifySecondary,
+    eventDate,
   } = req.body;
-
+  console.log("djkandkjnaskjdjks");
+  console.log(req.body);
   try {
     let permission = ac.can(req.role).updateAny(MODULES.edit_artist);
 
@@ -227,6 +229,7 @@ const editArtist = async (req, res, next) => {
         instagramSecondary,
         youtubeSecondary,
         spotifySecondary,
+        eventDate,
       },
       {
         new: true,
