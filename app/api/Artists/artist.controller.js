@@ -1,21 +1,9 @@
 const artistModel = require("./artist.model.js");
 const artistsModel = require("./artist.model.js");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { MODULES, ac } = require("../../utils/accessControl.js");
-const multer = require("multer");
-const storage = multer.memoryStorage(); // Almacenar las imágenes en memoria
-const upload = multer({ storage: storage });
 
 const getArtists = async (req, res, next) => {
   try {
-    // const { role } = req;
-    // let permission = ac.can(role).readAny(MODULES.get_artists);
-
-    // if (!permission.granted) {
-    //   return next({ name: "Permission" });
-    // }
-
     const artists = await artistsModel
       .find({
         role: { $ne: "Client" },
@@ -68,14 +56,9 @@ const registerArtist = async (req, res, next) => {
     instagram,
     youtube,
     spotify,
-    soundCloudSecondary,
-    instagramSecondary,
-    youtubeSecondary,
-    spotifySecondary,
     eventDate,
+    organization,
   } = req.body;
-
-  console.log(req.body);
 
   try {
     let permission = ac.can(req.role).createAny(MODULES.register_artist);
@@ -104,11 +87,8 @@ const registerArtist = async (req, res, next) => {
         instagram,
         youtube,
         spotify,
-        soundCloudSecondary,
-        instagramSecondary,
-        youtubeSecondary,
-        spotifySecondary,
         eventDate,
+        organization,
       });
 
       // Guardar el nuevo artista en la base de datos
@@ -125,42 +105,6 @@ const registerArtist = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-const loginArtist = async (req, res, next) => {
-  // const { email, password } = req.body;
-  // try {
-  //   const artist = await artistsModel.findOne({
-  //     email,
-  //   });
-  //   if (artist) {
-  //     await bcrypt.compare(password, artist.password, function (err, result) {
-  //       if (err) {
-  //         console.error(err);
-  //         return;
-  //       }
-  //       if (result) {
-  //         let artistForJwt = {
-  //           id: artist._id,
-  //           email: artist.email,
-  //           role: artist.role,
-  //           name: artist.name,
-  //           lastName: artist.lastName,
-  //         };
-  //         const jwtToken = jwt.sign(artistForJwt, process.env.JWT_SECRET, {
-  //           expiresIn: "12h",
-  //         });
-  //         return res.status(200).send({ ...artistForJwt, token: jwtToken });
-  //       } else {
-  //         return res.status(400).json({ error: "Wrong email or password." });
-  //       }
-  //     });
-  //   } else {
-  //     return res.status(400).json({ error: "Unregistered artist." });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 const editArtist = async (req, res, next) => {
@@ -184,9 +128,8 @@ const editArtist = async (req, res, next) => {
     youtubeSecondary,
     spotifySecondary,
     eventDate,
+    organization,
   } = req.body;
-  console.log("djkandkjnaskjdjks");
-  console.log(req.body);
   try {
     let permission = ac.can(req.role).updateAny(MODULES.edit_artist);
 
@@ -230,6 +173,7 @@ const editArtist = async (req, res, next) => {
         youtubeSecondary,
         spotifySecondary,
         eventDate,
+        organization,
       },
       {
         new: true,
@@ -242,33 +186,71 @@ const editArtist = async (req, res, next) => {
   }
 };
 
-const disableArtist = async (req, res, next) => {
+const disableOrActiveArtist = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const { role } = req;
-    let permission = ac.can(role).deleteAny(MODULES.disable_artist);
+    let permission = ac.can(role).updateAny(MODULES.disable_or_active_artist);
 
     if (!permission.granted) {
       return next({ name: "Permission" });
     }
 
-    await artistsModel.findByIdAndUpdate(
-      id,
-      { status: "disabled" },
-      { new: true }
-    );
+    const artist = await artistModel.findById(id);
 
-    return res.status(200).json(["Artist Disabled."]);
+    if (artist.status === "active") {
+      artist.status = "disabled";
+    } else {
+      artist.status = "active";
+    }
+
+    await artist.save();
+
+    return res
+      .status(200)
+      .json([
+        artist.status === "active" ? "Artist Actived." : "Artist Disabled.",
+      ]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const archiveOrShowArtist = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const { role } = req;
+    let permission = ac.can(role).deleteAny(MODULES.archive_or_show_artist);
+
+    if (!permission.granted) {
+      return next({ name: "Permission" });
+    }
+
+    const artist = await artistModel.findById(id);
+
+    if (artist.status !== "archived") {
+      artist.status = "active";
+    } else {
+      artist.status = "archived";
+    }
+
+    await artist.save();
+
+    return res
+      .status(200)
+      .json([
+        artist.status === "active" ? "Artist Actived." : "Artist Disabled.",
+      ]);
   } catch (error) {
     next(error);
   }
 };
 module.exports = {
   registerArtist,
-  loginArtist,
   editArtist,
-  disableArtist,
+  disableOrActiveArtist,
   getArtists,
   getArtistById,
+  archiveOrShowArtist,
 };

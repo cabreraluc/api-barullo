@@ -38,7 +38,9 @@ const MODULES = {
   register_artist: "register_artist",
   edit_artist: "edit_artist",
   get_artist_by_id: "get_artist_by_id",
-  disable_artist: "disable_artist",
+  disable_or_active_artist: "disable_or_active_artist",
+  archive_or_show_artist: "archive_or_show_artist",
+
   ///////////////
   get_events: "get_events",
   register_event: "register_event",

@@ -43,16 +43,14 @@ ac.grant(ROLES.ADMIN)
   .updateAny(MODULES.edit_user)
   .updateAny(MODULES.change_prospect_status)
   .updateAny(MODULES.change_interest_level)
+  .updateAny(MODULES.disable_or_active_artist)
 
   // DELETE
   .deleteAny(MODULES.disable_client)
   .deleteAny(MODULES.disable_prospect)
   .deleteAny(MODULES.disable_user)
   .deleteAny(MODULES.archive_activity)
-  .deleteAny(MODULES.disable_artist)
   .deleteAny(MODULES.disable_event)
-
-  // >>>>>>>>>>>>>>> OPERADOR RECAUDADOR ------------------------------------------------------------------------------------------------
 
   .grant(ROLES.MEMBER)
 
@@ -77,8 +75,6 @@ ac.grant(ROLES.ADMIN)
   // DELETE
   .deleteAny(MODULES.disable_client)
   .deleteAny(MODULES.disable_prospect);
-
-// >>>>>>>>>>>>>>> LIQUIDADOR CAJA ------------------------------------------------------------------------------------------------
 
 module.exports = {
   ac,
