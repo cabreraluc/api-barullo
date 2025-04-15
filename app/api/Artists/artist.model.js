@@ -16,9 +16,6 @@ const ArtistsSchema = Schema(
     artistName: {
       type: String,
     },
-    secondaryArtistName: {
-      type: String,
-    },
     shortDescription: {
       type: String,
     },
@@ -37,29 +34,23 @@ const ArtistsSchema = Schema(
     spotify: {
       type: String,
     },
-    soundCloudSecondary: {
-      type: String,
-    },
-    instagramSecondary: {
-      type: String,
-    },
-    youtubeSecondary: {
-      type: String,
-    },
-    spotifySecondary: {
-      type: String,
-    },
     primaryImage: {
       type: String,
     },
     secondaryImage: {
       type: String,
     },
+    eventDate: {
+      type: String,
+    },
     status: {
-      enum: ["disabled", "active"],
+      enum: ["disabled", "active", "archived"],
 
       type: String,
       default: "active",
+    },
+    organization: {
+      type: String,
     },
   },
   { timestamps: true }
