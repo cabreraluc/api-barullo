@@ -52,6 +52,9 @@ const ArtistsSchema = Schema(
     organization: {
       type: String,
     },
+    b2b: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
