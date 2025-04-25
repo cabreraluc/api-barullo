@@ -12,9 +12,6 @@ router.use("/users", users);
 router.use("/artists", artists);
 router.use("/clients", clients);
 router.use("/products", products);
-router.use("/prospects", prospects);
-router.use("/calendar", calendar);
-router.use("/secondClients", secondClients);
 router.use("/payment", payment);
 
 module.exports = router;
