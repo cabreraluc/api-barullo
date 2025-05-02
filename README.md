@@ -23,7 +23,7 @@ Currently under development. The **events module is not ready** for use yet.
 ## 🚀 Installation
 
 1. Clone the repository:
-   git clone https://github.com/yourusername/barullo-api.git
+   git clone https://github.com/cabreraluc/barullo-api.git
    cd barullo-api
    
 2. Install dependencies:
