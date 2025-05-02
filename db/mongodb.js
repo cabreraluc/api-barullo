@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 mongoose.connection.on("open", () => console.log("db connected"));
 
-async function connectDb({ host, port, dbName }) {
-  const url = `mongodb+srv://cabreralucaspatricio:123@allstore2023.7opk11y.mongodb.net/barulloDB`;
+async function connectDb() {
+  const url = process.env.MONGO_DB_URL;
   await mongoose.connect(url, { useNewUrlParser: true });
 }
 

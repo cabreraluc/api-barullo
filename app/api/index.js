@@ -1,17 +1,10 @@
 const router = require("express").Router();
 const users = require("./Users/user.route");
-const clients = require("./Clients/client.route");
-const products = require("./Product/product.route");
-const prospects = require("./Prospect/prospect.route");
-const secondClients = require("./SecondClient/secondClient.route");
-const calendar = require("./Calendar/calendar.route");
 const artists = require("./Artists/artist.route");
 const payment = require("./Payment/payment.route");
 
 router.use("/users", users);
 router.use("/artists", artists);
-router.use("/clients", clients);
-router.use("/products", products);
 router.use("/payment", payment);
 
 module.exports = router;

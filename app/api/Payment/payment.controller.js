@@ -2,11 +2,11 @@ const { MercadoPagoConfig, Preference } = require("mercadopago");
 const PaymentModel = require("./payment.model");
 const qr = require("qr-image");
 const nodemailer = require("nodemailer");
-// Agrega credenciales
+
+//////////////////////EN PROCESO/////////////////////////
 
 const client = new MercadoPagoConfig({
-  accessToken:
-    "APP_USR-8740049470823933-042020-1417aafba9ae03fd5f3db7a91e13a064-359374298",
+  accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
 const createPreference = async (req, res) => {
@@ -170,3 +170,5 @@ module.exports = {
   sendInfo,
   getPaymentByQr,
 };
+
+//////////////////////EN PROCESO/////////////////////////
