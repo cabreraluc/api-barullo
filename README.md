@@ -29,13 +29,13 @@ Currently under development. The **events module is not ready** for use yet.
 2. Install dependencies:
    yarn
 
-2. Install dependencies:
+2. Create a .env file and add the environment variables:
    PORT=3000
    MONGO_DB_URL=
    JWT_SECRET=
    MP_ACCESS_TOKEN=
 
-2. Install dependencies:
+2. Run the server in development mode:
    yarn dev
 
    
